@@ -5,7 +5,7 @@ import java.util.List;
 public abstract class Compte {
     private int number;
     private String owner;
-    private double balance = 0;
+    protected double balance = 0;
     private Date openDate;
     private List<String> operationsList;
 
