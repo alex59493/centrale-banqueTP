@@ -62,16 +62,8 @@ public class Banque {
                 case 1: {
                     System.out.println(compte.getBalance());
 
-                    int currentSize = compte.getOperationsList().length;
-                    String[] newArray = new String[currentSize + 1];
-                    for (int i=0; i < currentSize; i++)
-                    {
-                        newArray[i] = compte.getOperationsList()[i];
-                    }
-                    newArray[currentSize] = "Truc en plus";
-                    compte.setOperationsList(newArray);
-
-                    System.out.println(compte.getOperationsList());
+                    // Log user action
+                    compte.addToOperationsList("Affichage du solde");
 
                     break;
                 }
@@ -80,30 +72,57 @@ public class Banque {
                     double amount = scanner.nextDouble();
                     compte.depositMoney(amount);
                     System.out.println("Votre nouveau solde est de " + compte.getBalance());
+
+                    // Log user action
+                    compte.addToOperationsList("Dépot d'argent sur le compte");
+
                     break;
                 }
                 case 3: {
                     System.out.println("Combien d'argent voulez-vous retirer ?");
                     double amount = scanner.nextDouble();
-                    compte.withdrawMoney(amount);
+                    try {
+                        compte.withdrawMoney(amount);
+                    }
+                    catch (Exception e) {
+                        // If not enough money on the account, throw an exception
+                        System.err.println("Caught Exception: " + e.getMessage());
+                        break;
+                    }
                     System.out.println("Votre nouveau solde est de " + compte.getBalance());
+
+                    // Log user action
+                    compte.addToOperationsList("Retrait d'argent de votre compte");
+
+                    break;
+                }
+                case 4: {
+                    System.out.println(compte.getOperationsList());
                     break;
                 }
                 case 5: {
                     if (choiceAccountType != 2) {
-                        System.out.println("Votre compte n'est pas concerné par cette action");
+                        System.out.println("Seul les comptes épargnes ont accès à cette fonctionnalité");
                         break;
                     }
                     else {
+                        double rate = ((CompteEpargne) compte).getRate();
+                        System.out.println("Intérêts : " + rate);
 
-                        System.out.println("Intérêts : ");
+                        // Log user action
+                        compte.addToOperationsList("Affichage des intérêts");
+
+                        break;
                     }
                 }
-            }
-
-            if (action == 10) {
-                quitter = true ;
-                continue;
+                case 10: {
+                    quitter = true ;
+                    break;
+                }
+                default: {
+                    System.out.println("Veuillez renseigner un choix valide");
+                    break;
+                }
             }
         } while (!quitter);
     }

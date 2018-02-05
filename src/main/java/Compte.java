@@ -1,12 +1,20 @@
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public abstract class Compte {
     private int number;
     private String owner;
     private double balance = 0;
     private Date openDate;
-    private String[] operationsList;
+    private List<String> operationsList;
 
+    public Compte(int number, String owner) {
+        this.number = number;
+        this.owner = owner;
+        this.openDate = new Date();
+        this.operationsList = new ArrayList<String>();
+    }
 
     public int getNumber() {
         return number;
@@ -40,26 +48,20 @@ public abstract class Compte {
         this.openDate = openDate;
     }
 
-    public String[] getOperationsList() {
-        return operationsList;
+    public List getOperationsList() {
+        return this.operationsList;
     }
 
-    public void setOperationsList(String[] operationsList) {
-        this.operationsList = operationsList;
-    }
-
-    public Compte(int number, String owner) {
-        this.number = number;
-        this.owner = owner;
-        this.openDate = new Date();
+    public void addToOperationsList(String action) {
+        operationsList.add(action);
     }
 
     public void depositMoney(double amount) {
         this.balance += amount;
     }
 
-    public void withdrawMoney(double amount) {
-        // TODO: Checker si la balance est supérieur au découvert autorisé (Pour compte courant)
+    public void withdrawMoney(double amount) throws NotEnoughMoneyException {
+        if (this.balance - amount < 0) throw new NotEnoughMoneyException("Not enough money");
         this.balance -= amount;
     }
 }
