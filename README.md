@@ -1,4 +1,3 @@
 # TP Centrale : Bank
 
-### TODO:
-- Add tests
+With JUnit Unit tests
